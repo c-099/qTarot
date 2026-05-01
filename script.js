@@ -121,7 +121,10 @@
     drawBtn.disabled = true;
     setStatus("Drawing " + POSITIONS[drawn.length].toLowerCase() + " card\u2026", "");
 
-    fetch("/api/draw")
+    var excludeParam = drawn.map(function (c) { return c.cardNum; }).join(",");
+    var url = "/api/draw" + (excludeParam ? "?exclude=" + excludeParam : "");
+
+    fetch(url)
       .then(function (res) {
         if (!res.ok) throw new Error("Server returned " + res.status);
         return res.json();
@@ -130,16 +133,18 @@
         if (data.error) throw new Error(data.error);
 
         if (!data.accepted) {
-          setStatus(
-            "Quantum rejection \u2014 value " + data.raw + " discarded (bias guard). Redrawing\u2026",
-            "rejection"
-          );
+          if (data.reason === "duplicate") {
+            setStatus(data.card + " already drawn. Redrawing\u2026", "rejection");
+          } else {
+            setStatus("Quantum rejection \u2014 value " + data.raw + " discarded (bias guard). Redrawing\u2026", "rejection");
+          }
           setTimeout(drawCard, 1200);
           return;
         }
 
         var i = drawn.length;
-        drawn.push({ index: i, card: data.card, reversed: data.reversed });
+        var mapped = data.raw % 156;
+        drawn.push({ index: i, card: data.card, reversed: data.reversed, cardNum: mapped % 78 });
         renderCard(i, data.card, data.reversed);
 
         if (drawn.length < 3) {

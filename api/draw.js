@@ -35,6 +35,11 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "QRNG_API_KEY not configured" });
   }
 
+  const excludeParam = req.query.exclude || "";
+  const exclude = excludeParam
+    ? excludeParam.split(",").map(Number).filter(function (n) { return !isNaN(n) && n >= 0 && n < 78; })
+    : [];
+
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -57,15 +62,18 @@ export default async function handler(req, res) {
 
     const result = await response.json();
     const raw = parseInt(result.random_numbers[0].decimal, 10);
-    const accepted = raw < REJECTION_LIMIT;
 
-    if (!accepted) {
-      return res.status(200).json({ raw, accepted: false, card: null, reversed: null });
+    if (raw >= REJECTION_LIMIT) {
+      return res.status(200).json({ raw, accepted: false, card: null, reversed: null, reason: "quantum" });
     }
 
     const mapped = raw % 156;
     const cardNum = mapped % 78;
     const reversed = mapped >= 78;
+
+    if (exclude.includes(cardNum)) {
+      return res.status(200).json({ raw, accepted: false, card: CARDS[cardNum], reversed, reason: "duplicate" });
+    }
 
     return res.status(200).json({
       raw,
