@@ -1,12 +1,15 @@
 (function () {
-  const POSITIONS = ["Left", "Center", "Right"];
-  const drawn = [];
+  var POSITIONS = ["Left", "Center", "Right"];
+  var HOLD_MS = 3330;
+  var drawn = [];
+  var holdTimer = null;
+  var holding = false;
 
-  const drawBtn = document.getElementById("draw-btn");
-  const status = document.getElementById("status");
-  const promptSection = document.getElementById("prompt-section");
-  const promptBox = document.getElementById("prompt-box");
-  const copyBtn = document.getElementById("copy-btn");
+  var drawBtn = document.getElementById("draw-btn");
+  var status = document.getElementById("status");
+  var promptSection = document.getElementById("prompt-section");
+  var promptBox = document.getElementById("prompt-box");
+  var copyBtn = document.getElementById("copy-btn");
 
   function getSlot(i) {
     return document.getElementById("slot-" + i);
@@ -64,6 +67,56 @@
     return header + cardsLine + "\n\n" + instructions;
   }
 
+  function cancelHold() {
+    if (!holding) return;
+    holding = false;
+    clearTimeout(holdTimer);
+    holdTimer = null;
+    drawBtn.classList.remove("holding");
+    setStatus("", "");
+  }
+
+  function startHold(e) {
+    if (e.type === "click") return;
+    if (drawBtn.disabled) return;
+    if (holding) return;
+
+    holding = true;
+    drawBtn.classList.add("holding");
+    setStatus("Focus on your question while the draw is made\u2026", "");
+
+    holdTimer = setTimeout(function () {
+      holding = false;
+      holdTimer = null;
+      drawBtn.classList.remove("holding");
+      drawCard();
+    }, HOLD_MS);
+  }
+
+  function endHold(e) {
+    if (!holding) return;
+    e.preventDefault();
+    cancelHold();
+  }
+
+  drawBtn.addEventListener("mousedown", startHold);
+  drawBtn.addEventListener("touchstart", startHold);
+  drawBtn.addEventListener("mouseup", endHold);
+  drawBtn.addEventListener("touchend", endHold);
+  drawBtn.addEventListener("mouseleave", cancelHold);
+  drawBtn.addEventListener("touchcancel", cancelHold);
+  drawBtn.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
+  drawBtn.addEventListener("click", function () {
+    if (drawn.length >= 3) {
+      drawn.length = 0;
+      resetSlots();
+      promptSection.classList.remove("visible");
+      setStatus("", "");
+      drawBtn.textContent = "Hold to Draw";
+    }
+  });
+
   function drawCard() {
     drawBtn.disabled = true;
     setStatus("Drawing " + POSITIONS[drawn.length].toLowerCase() + " card\u2026", "");
@@ -92,13 +145,15 @@
         if (drawn.length < 3) {
           setStatus("", "");
           drawBtn.disabled = false;
-          drawBtn.textContent = "Draw Next Card";
+          drawBtn.textContent = "Hold to Draw";
         } else {
-          setStatus("", "");
-          drawBtn.disabled = false;
-          drawBtn.textContent = "Draw Again";
+          drawBtn.textContent = "Hold to Draw Again";
           promptBox.textContent = buildPrompt();
           promptSection.classList.add("visible");
+          setTimeout(function () {
+            setStatus("", "");
+            drawBtn.disabled = false;
+          }, 3330);
         }
       })
       .catch(function (err) {
@@ -106,17 +161,6 @@
         drawBtn.disabled = false;
       });
   }
-
-  drawBtn.addEventListener("click", function () {
-    if (drawn.length >= 3) {
-      drawn.length = 0;
-      resetSlots();
-      promptSection.classList.remove("visible");
-      setStatus("", "");
-      drawBtn.textContent = "Draw Next Card";
-    }
-    drawCard();
-  });
 
   copyBtn.addEventListener("click", function () {
     var text = promptBox.textContent;

@@ -136,30 +136,56 @@
     color: #c77da0;
   }
 
-  #draw-btn {
-    font-family: inherit;
-    font-size: 0.9rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: #2e2636;
-    color: #d4c5a9;
-    border: 1px solid #4a3f52;
-    border-radius: 4px;
-    padding: 0.7rem 2rem;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    margin-bottom: 1rem;
-  }
+#draw-btn {
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #2e2636;
+  color: #d4c5a9;
+  border: 1px solid #4a3f52;
+  border-radius: 4px;
+  padding: 0.7rem 2rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
 
-  #draw-btn:hover:not(:disabled) {
-    background: #3a3050;
-    border-color: #6b5a7d;
-  }
+#draw-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: #5a4a6d;
+  transition: none;
+  pointer-events: none;
+}
 
-  #draw-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+#draw-btn.holding::before {
+  width: 100%;
+  transition: width 3.33s linear;
+}
+
+#draw-btn:hover:not(:disabled) {
+  border-color: #6b5a7d;
+}
+
+#draw-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#draw-btn:disabled::before {
+  width: 0% !important;
+  transition: none !important;
+}
 
   .status {
     font-size: 0.8rem;
@@ -255,7 +281,7 @@
   </div>
 </div>
 
-<button id="draw-btn">Draw Next Card</button>
+<button id="draw-btn">Hold to Draw</button>
 <div class="status" id="status"></div>
 
 <div class="prompt-section" id="prompt-section">
