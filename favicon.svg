@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0d0a0e"/>
+  <circle cx="16" cy="14" r="8" fill="none" stroke="#e8d5b5" stroke-width="2"/>
+  <path d="M21 20 L27 26" stroke="#e8d5b5" stroke-width="2" stroke-linecap="round"/>
+  <text x="16" y="18" font-family="serif" font-size="12" fill="#c77da0" text-anchor="middle">✦</text>
+</svg>
