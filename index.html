@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>qTarot — Quantum Tarot Draw</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #0d0a0e;
+    color: #d4c5a9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    color: #e8d5b5;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #7a6f5f;
+    margin-bottom: 2rem;
+    letter-spacing: 0.08em;
+  }
+
+  .inputs {
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 2rem;
+  }
+
+  .inputs label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7a6f5f;
+    margin-bottom: 0.3rem;
+  }
+
+  .inputs input,
+  .inputs textarea {
+    width: 100%;
+    background: #1a1520;
+    border: 1px solid #2e2636;
+    border-radius: 4px;
+    color: #d4c5a9;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 1rem;
+    resize: vertical;
+  }
+
+  .inputs input::placeholder,
+  .inputs textarea::placeholder {
+    color: #4a3f52;
+  }
+
+  .inputs input:focus,
+  .inputs textarea:focus {
+    outline: none;
+    border-color: #6b5a7d;
+  }
+
+  .cards {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .card-slot {
+    width: 160px;
+    min-height: 240px;
+    border: 1px solid #2e2636;
+    border-radius: 8px;
+    background: #1a1520;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .card-slot .position-label {
+    position: absolute;
+    top: 0.6rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #4a3f52;
+  }
+
+  .card-slot.face-down::after {
+    content: '✦';
+    font-size: 2.5rem;
+    color: #2e2636;
+  }
+
+  .card-slot.drawn {
+    border-color: #5a4a6d;
+    background: #1f1828;
+  }
+
+  .card-slot .card-name {
+    font-size: 1rem;
+    text-align: center;
+    color: #e8d5b5;
+    line-height: 1.3;
+  }
+
+  .card-slot .card-name .reversed {
+    display: block;
+    font-size: 0.75rem;
+    color: #8b4a6b;
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  .card-slot.reversed-card .card-name {
+    color: #c77da0;
+  }
+
+  #draw-btn {
+    font-family: inherit;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: #2e2636;
+    color: #d4c5a9;
+    border: 1px solid #4a3f52;
+    border-radius: 4px;
+    padding: 0.7rem 2rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 1rem;
+  }
+
+  #draw-btn:hover:not(:disabled) {
+    background: #3a3050;
+    border-color: #6b5a7d;
+  }
+
+  #draw-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .status {
+    font-size: 0.8rem;
+    color: #7a6f5f;
+    min-height: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .status.rejection {
+    color: #a06050;
+  }
+
+  .status.error {
+    color: #c05050;
+  }
+
+  .prompt-section {
+    width: 100%;
+    max-width: 640px;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .prompt-section.visible {
+    display: block;
+  }
+
+  .prompt-section .prompt-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7a6f5f;
+    margin-bottom: 0.4rem;
+  }
+
+  .prompt-box {
+    background: #1a1520;
+    border: 1px solid #2e2636;
+    border-radius: 4px;
+    padding: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #d4c5a9;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  #copy-btn {
+    font-family: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #7a6f5f;
+    border: 1px solid #2e2636;
+    border-radius: 3px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    margin-top: 0.6rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  #copy-btn:hover {
+    color: #d4c5a9;
+    border-color: #4a3f52;
+  }
+</style>
+</head>
+<body>
+
+<h1>qTarot</h1>
+<p class="subtitle">Quantum-generated tarot draw</p>
+
+<div class="inputs">
+  <label for="name-input">Your name</label>
+  <input type="text" id="name-input" placeholder="Anonymous">
+
+  <label for="question-input">Your question</label>
+  <textarea id="question-input" rows="2" placeholder="What do you seek guidance on?"></textarea>
+</div>
+
+<div class="cards">
+  <div class="card-slot face-down" id="slot-0">
+    <span class="position-label">Left</span>
+  </div>
+  <div class="card-slot face-down" id="slot-1">
+    <span class="position-label">Center</span>
+  </div>
+  <div class="card-slot face-down" id="slot-2">
+    <span class="position-label">Right</span>
+  </div>
+</div>
+
+<button id="draw-btn">Draw Next Card</button>
+<div class="status" id="status"></div>
+
+<div class="prompt-section" id="prompt-section">
+  <p class="prompt-label">Paste into your LLM for interpretation</p>
+  <div class="prompt-box" id="prompt-box"></div>
+  <button id="copy-btn">Copy to clipboard</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
