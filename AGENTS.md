@@ -1,27 +1,21 @@
 # qTarot — Agent instructions
 
-## Two modes: CLI and web
-
-- **CLI**: `getrandom.js` — Node script, draws 3 cards at once
-- **Web**: `index.html` + `script.js` + `api/draw.js` — Vercel-hosted, one card at a time
+## Web app — Vercel-hosted, one card at a time
 
 ```bash
-# CLI
-set QRNG_API_KEY=<your-key> && node getrandom.js
-
-# Web (local dev)
+# Local dev
 npx vercel dev
-# Then set QRNG_API_KEY in Vercel dashboard (Settings → Environment Variables)
+# Set QRNG_API_KEY in Vercel dashboard (Settings → Environment Variables)
 ```
 
 Get a free QRNG API key at https://outshift.cisco.com/quantum/quantum-random-number-generator
 
 ## How it works
 
-1. POSTs to Cisco QRNG API for raw 16-bit blocks (5 for CLI, 1 per card for web).
+1. POSTs to Cisco QRNG API for 1 raw 16-bit block per card.
 2. Rejection-samples values < 65520, mod 156 to get a uniform 0–155.
-3. Draws cards: index = `mapped[i] % 78`, reversed = `mapped[i] >= 78`.
-4. CLI prints all 3 + LLM prompt. Web reveals one card at a time, auto-retries on rejection, builds prompt after 3 accepted draws.
+3. Draws card: index = `mapped % 78`, reversed = `mapped >= 78`.
+4. Web reveals one card at a time (hold button 3.33s to draw), auto-retries on rejection, builds prompt after 3 accepted draws.
 
 ## Card data
 
@@ -30,7 +24,8 @@ Get a free QRNG API key at https://outshift.cisco.com/quantum/quantum-random-num
 ## Web architecture
 
 - `api/draw.js` — Vercel Serverless Function (Node). Proxies QRNG API, holds `QRNG_API_KEY` server-side. Returns `{ raw, accepted, card, reversed }`.
-- `script.js` — Vanilla JS, no build step. Calls `GET /api/draw` per card.
+- `script.js` — Vanilla JS, no build step. Calls `GET /api/draw` per card. Hold-to-draw button (3.33s), auto-retry on rejection, 3.33s cooldown after 3rd card.
+- `index.html` — Static page with name/question inputs, 3 card slots, prompt output, GitHub link, Buy Me a Coffee button.
 - `vercel.json` — Empty `{}`, Vercel auto-detects `api/` dir and `index.html`.
 
 ## Conventions
