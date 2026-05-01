@@ -1,0 +1,1 @@
+replace 'process.env.QRNG_API_KEY' with your free api key from https://outshift.cisco.com/quantum/quantum-random-number-generator
