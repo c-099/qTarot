@@ -8,18 +8,17 @@ npx vercel dev
 # Set QRNG_API_KEY in Vercel dashboard (Settings → Environment Variables)
 ```
 
-Get a free QRNG API key at https://outshift.cisco.com/quantum/quantum-random-number-generator
-
 ## How it works
 
 1. POSTs to Cisco QRNG API for 1 raw 16-bit block per card.
 2. Rejection-samples values < 65520, mod 156 to get a uniform 0–155.
 3. Draws card: index = `mapped % 78`, reversed = `mapped >= 78`.
-4. Web reveals one card at a time (hold button 3.33s to draw), auto-retries on rejection, builds prompt after 3 accepted draws.
+4. Rejects duplicates.
+5. Reveals one card at a time (hold button 3.33s to draw), auto-retries on rejection, builds prompt after 3 accepted draws.
 
 ## Card data
 
-78-card tarot deck in `CARDS` array: 22 Major Arcana (The Fool–The World) + 56 Minor Arcana (Wands, Pentacles, Swords, Cups × Ace–King). Array is duplicated in `getrandom.js` and `api/draw.js` (no shared modules — keep both in sync).
+78-card tarot deck in `CARDS` array: 22 Major Arcana (The Fool–The World) + 56 Minor Arcana (Wands, Pentacles, Swords, Cups × Ace–King). Array is located in `api/draw.js`.
 
 ## Web architecture
 
