@@ -1,3 +1,5 @@
+https://q-tarot.vercel.app/
+
 Inspired by The Night Stream episodes:
 
 https://www.youtube.com/watch?v=QdZEUebQIwc
