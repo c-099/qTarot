@@ -70,49 +70,228 @@
     color: #4a3f52;
   }
 
-  .inputs input:focus,
-  .inputs textarea:focus {
-    outline: none;
-    border-color: #6b5a7d;
-  }
+.inputs input:focus,
+.inputs textarea:focus {
+outline: none;
+border-color: #6b5a7d;
+}
 
-  .cards {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
+#spread-btn {
+width: auto;
+background: #1a1520;
+border: 1px solid #2e2636;
+border-radius: 4px;
+color: #d4c5a9;
+font-family: inherit;
+font-size: 0.75rem;
+padding: 0.35rem 0.8rem;
+letter-spacing: 0.06em;
+cursor: pointer;
+position: relative;
+margin-bottom: 1rem;
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
 
-  .card-slot {
-    width: 160px;
-    min-height: 240px;
-    border: 1px solid #2e2636;
-    border-radius: 8px;
-    background: #1a1520;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    position: relative;
-    transition: border-color 0.3s, background 0.3s;
-  }
+#spread-btn::after {
+content: '▾';
+margin-left: 0.4rem;
+color: #7a6f5f;
+transition: transform 0.2s;
+display: inline-block;
+}
 
-  .card-slot .position-label {
-    position: absolute;
-    top: 0.6rem;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #4a3f52;
-  }
+#spread-btn.open::after {
+transform: rotate(180deg);
+}
 
-  .card-slot.face-down::after {
-    content: '✦';
-    font-size: 2.5rem;
-    color: #2e2636;
-  }
+#spread-btn:disabled {
+opacity: 0.4;
+cursor: not-allowed;
+}
+
+.spread-panel {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.3s ease, padding 0.3s ease;
+background: #1a1520;
+border: 1px solid transparent;
+border-radius: 4px;
+margin-bottom: 1rem;
+}
+
+.spread-panel.open {
+max-height: 500px;
+border-color: #2e2636;
+padding: 0 0.75rem 0.75rem;
+}
+
+#spread-category {
+width: 100%;
+background: #0d0a0e;
+border: 1px solid #2e2636;
+border-radius: 4px;
+color: #d4c5a9;
+font-family: inherit;
+font-size: 0.85rem;
+padding: 0.5rem 0.6rem;
+margin-bottom: 0.6rem;
+}
+
+#spread-category:focus {
+outline: none;
+border-color: #6b5a7d;
+}
+
+.spread-choice-btn {
+display: flex;
+width: 90%;
+background: transparent;
+border: 1px solid #2e2636;
+border-radius: 4px;
+color: #d4c5a9;
+font-family: inherit;
+font-size: 0.82rem;
+padding: 0.55rem 0.7rem;
+margin: 0 auto 0.4rem auto;
+cursor: pointer;
+transition: border-color 0.15s, background 0.15s;
+}
+
+.spread-choice-btn .pos-left,
+.spread-choice-btn .pos-center,
+.spread-choice-btn .pos-right {
+flex: 1;
+text-align: center;
+}
+
+.spread-choice-btn:hover {
+border-color: #6b5a7d;
+background: #221a2e;
+}
+
+.spread-choice-btn.selected {
+border-color: #5a4a6d;
+background: #1f1828;
+color: #e8d5b5;
+}
+
+.cards {
+display: flex;
+gap: 1.5rem;
+justify-content: center;
+flex-wrap: nowrap;
+}
+
+@media (max-width: 420px) {
+.cards { gap: 0.75rem; }
+}
+
+.card-slot {
+flex: 1;
+min-width: 80px;
+max-width: 160px;
+min-height: 180px;
+border: 1px solid #2e2636;
+border-radius: 8px;
+background: #1a1520;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 1rem;
+position: relative;
+transition: border-color 0.3s, background 0.3s;
+}
+
+.cards-container {
+width: 100%;
+max-width: 528px;
+margin-bottom: 1.5rem;
+}
+
+.cards-labels {
+display: flex;
+gap: 1.5rem;
+justify-content: center;
+margin-bottom: 0.4rem;
+}
+
+@media (max-width: 420px) {
+.cards-labels { gap: 0.75rem; }
+}
+
+.cards-labels .position-label {
+flex: 1;
+max-width: 160px;
+min-width: 80px;
+text-align: center;
+font-size: 0.65rem;
+text-transform: uppercase;
+letter-spacing: 0.12em;
+color: #4a3f52;
+}
+
+.cards-labels .position-label.drawing {
+animation: label-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes label-glow {
+0%, 100% { text-shadow: 0 0 6px #5a4a6d, 0 0 12px #5a4a6d; }
+50% { text-shadow: 0 0 12px #8b6aad, 0 0 24px #8b6aad; }
+}
+
+.card-slot .draw-btn {
+font-family: inherit;
+font-size: 0.65rem;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+background: #2e2636;
+color: #d4c5a9;
+border: 1px solid #4a3f52;
+border-radius: 4px;
+padding: 0.5rem 0.6rem;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+-webkit-user-select: none;
+user-select: none;
+-webkit-touch-callout: none;
+touch-action: manipulation;
+width: 90%;
+}
+
+.card-slot .draw-btn::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+height: 100%;
+width: 0%;
+background: #5a4a6d;
+transition: none;
+pointer-events: none;
+}
+
+.card-slot .draw-btn.holding::before {
+width: 100%;
+transition: width 3.33s linear;
+}
+
+.card-slot .draw-btn:hover:not(:disabled) {
+border-color: #6b5a7d;
+}
+
+.card-slot .draw-btn:disabled {
+opacity: 0.4;
+cursor: not-allowed;
+}
+
+.card-slot .draw-btn:disabled::before {
+width: 0% !important;
+transition: none !important;
+}
 
   .card-slot.drawn {
     border-color: #5a4a6d;
@@ -138,55 +317,27 @@
     color: #c77da0;
   }
 
-#draw-btn {
-  font-family: inherit;
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: #2e2636;
-  color: #d4c5a9;
-  border: 1px solid #4a3f52;
-  border-radius: 4px;
-  padding: 0.7rem 2rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
+#reset-btn {
+font-family: inherit;
+font-size: 0.8rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+background: #2e2636;
+color: #d4c5a9;
+border: 1px solid #4a3f52;
+border-radius: 4px;
+padding: 0.6rem 1.5rem;
+cursor: pointer;
+margin-bottom: 1rem;
+display: none;
 }
 
-#draw-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0%;
-  background: #5a4a6d;
-  transition: none;
-  pointer-events: none;
+#reset-btn.visible {
+display: inline-block;
 }
 
-#draw-btn.holding::before {
-  width: 100%;
-  transition: width 3.33s linear;
-}
-
-#draw-btn:hover:not(:disabled) {
-  border-color: #6b5a7d;
-}
-
-#draw-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-#draw-btn:disabled::before {
-  width: 0% !important;
-  transition: none !important;
+#reset-btn:hover {
+border-color: #6b5a7d;
 }
 
   .status {
@@ -267,23 +418,38 @@
   <label for="name-input">Your name</label>
   <input type="text" id="name-input" placeholder="Anonymous">
 
-  <label for="question-input">Your question</label>
-  <textarea id="question-input" rows="2" placeholder="What do you seek guidance on?"></textarea>
+<label for="question-input">Your question</label>
+<textarea id="question-input" rows="2" placeholder="What do you seek guidance on?"></textarea>
+
+<button id="spread-btn" type="button">Select Spread</button>
+<div id="spread-panel" class="spread-panel">
+<label for="spread-category">Category</label>
+<select id="spread-category"></select>
+<div id="spread-choices"></div>
+</div>
+</div>
+
+<div class="cards-container">
+<div class="cards-labels" id="cards-labels">
+<span class="position-label">Past</span>
+<span class="position-label">Present</span>
+<span class="position-label">Future</span>
 </div>
 
 <div class="cards">
-  <div class="card-slot face-down" id="slot-0">
-    <span class="position-label">Left</span>
-  </div>
-  <div class="card-slot face-down" id="slot-1">
-    <span class="position-label">Center</span>
-  </div>
-  <div class="card-slot face-down" id="slot-2">
-    <span class="position-label">Right</span>
-  </div>
+<div class="card-slot face-down" id="slot-0">
+<button class="draw-btn" type="button">Hold to Draw</button>
+</div>
+<div class="card-slot face-down" id="slot-1">
+<button class="draw-btn" type="button">Hold to Draw</button>
+</div>
+<div class="card-slot face-down" id="slot-2">
+<button class="draw-btn" type="button">Hold to Draw</button>
+</div>
+</div>
 </div>
 
-<button id="draw-btn">Hold to Draw</button>
+<button id="reset-btn">Draw Again</button>
 <div class="status" id="status"></div>
 
 <div class="prompt-section" id="prompt-section">

@@ -1,0 +1,156 @@
+{
+    "General": [
+        {
+            "id": "1",
+            "left": "Past",
+            "center": "Present",
+            "right": "Future"
+        },
+        {
+            "id": "2",
+            "left": "The nature of your problem",
+            "center": "The cause",
+            "right": "The solution"
+        },
+        {
+            "id": "3",
+            "left": "Current situation",
+            "center": "Obstacle",
+            "right": "Advice"
+        },
+        {
+            "id": "4",
+            "left": "Situation",
+            "center": "Action",
+            "right": "Outcome"
+        },
+        {
+            "id": "5",
+            "left": "Context of the situation",
+            "center": "Where you need to focus",
+            "right": "Outcome"
+        },
+        {
+            "id": "6",
+            "left": "What I think about the situation",
+            "center": "What I feel",
+            "right": "What I do" 
+        }
+    ],
+    "Future and Past": [
+        {
+            "id": "7",
+            "left": "Where you stand now",
+            "center": "What you aspire to",
+            "right": "How to get there"
+        },
+        {
+            "id": "8",
+            "left": "What you aspire to",
+            "center": "What is standing in your way",
+            "right": "How you can overcome this"
+        },
+        {
+            "id": "9",
+            "left": "What will help you",
+            "center": "What will hinder you",
+            "right": "What is your unrealised potential"
+        },
+        {
+            "id": "10",
+            "left": "What you can change",
+            "center": "What you can't change",
+            "right": "What you may not be aware of"
+        },
+        {
+            "id": "11",
+            "left": "What worked well",
+            "center": "What didn't work well",
+            "right": "Key learnings"
+        }
+    ],
+    "Love and Relationships": [
+        {
+            "id": "12",
+            "left": "You",
+            "center": "The other person",
+            "right": "The relationship"
+        },
+        {
+            "id": "13",
+            "left": "What you want from the relationship",
+            "center": "What they want from the relationship",
+            "right": "Where the relationship is heading"
+        },
+        {
+            "id": "14",
+            "left": "What brings you together",
+            "center": "What pulls you apart",
+            "right": "What needs your attention"
+        }
+    ],
+    "Decision-Making and Choices" : [
+         {
+            "id": "15",
+            "left": "Strengths",
+            "center": "Weaknesses",
+            "right": "Advice"
+        },
+        {
+            "id": "16",
+            "left": "Opportunities",
+            "center": "Challenges",
+            "right": "Outcome"
+        },
+        {
+            "id": "17",
+            "left": "The solution",
+            "center": "An alternative solution",
+            "right": "How to choose"
+        },
+        {
+            "id": "18",
+            "left": "Option 1",
+            "center": "Option 2",
+            "right": "What you need to know to make a decision"
+        },
+        {
+            "id": "19",
+            "left": "Option 1",
+            "center": "Option 2",
+            "right": "Option 3"
+        }
+    ],
+        "Mind / Body / Spirit": [
+            {
+                "id": "20",
+                "left": "Your conscious mind",
+                "center": "Your sub-conscious mind",
+                "right": "Your super-conscious mind"
+            },
+            {
+                "id": "21",
+                "left": "Material state",
+                "center": "Emotional state",
+                "right": "Spiritual state"
+            },
+            {
+                "id": "22",
+                "left": "You",
+                "center": "Your current path",
+                "right": "Your potential"
+            },
+            {
+                "id": "23",
+                "left": "Stop",
+                "center": "Start",
+                "right": "Continue"
+            },
+            {
+                "id": "24",
+                "left": "What the Universe wants you to be",
+                "center": "The personal qualities required",
+                "right": "Specific action required"
+            }
+        ]        
+}
